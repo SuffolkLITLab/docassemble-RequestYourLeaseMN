@@ -1,0 +1,266 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+---
+metadata:
+  title: >-
+    Request your lease
+  short title: >-
+    Request your lease
+  description: |-
+    This interview helps someone in Minnesota request a copy of your lease.
+  can_I_use_this_form: |
+    If you are a _____________, you can use this interview to ____________.
+  before_you_start: |
+    This interview will help you request a copy of your lease.
+    
+    Before you get started, please gather:
+    
+    1. 
+    1. 
+    1. 
+    
+    When you are finished, you will need to:
+    
+    1. 
+    1.
+  maturity: production
+  estimated_completion_minutes: 10
+  estimated_completion_delta: 5
+  LIST_topics: 
+    - "HO-00-00-00-00"
+    - "HO-06-00-00-00"
+  tags:
+    - "HO-00-00-00-00"
+    - "HO-06-00-00-00"
+  authors:
+    - Gabriella Brown
+  original_form:
+    - https://homelinemn.org/form-letters/request-for-copy-of-lease/
+  original_form_published_on: ""
+  help_page_url: >-
+    https://homelinemn.org/form-letters/request-for-copy-of-lease/
+  help_page_title: >-
+    Request for copy of lease
+  allowed_courts: []
+  typical_role: "na"
+  al_weaver_version: "1.11.0"
+  generated_on: "2025-09-12"
+  languages:
+    - en
+  jurisdiction: NAM-US-US+MN
+  review_date: 2025-09-12
+  form_titles:
+    - Request your lease
+  form_numbers: []
+  update_notes: |
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MN"
+---
+code: |
+  github_repo_name =  'docassemble-RequestYourLease'
+---
+code: |
+  interview_short_title = "Request a copy of your lease"
+---
+code: |
+  al_form_type = "letter" 
+---
+objects:
+  - users: ALPeopleList.using(there_are_any=True)
+  - landlord: ALPeopleList.using(there_are_any=True)
+---
+sections:
+  - review_request_your_lease: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_request_your_lease
+code: |
+  # Set the allowed courts for this interview
+  nav.set_section("review_request_your_lease")
+  user_role = "na"
+  user_ask_role = "na"
+  users.gather()
+  set_parts(subtitle=str(users))
+  landlord[0].address.address
+  users[0].address.address
+  set_progress(33)
+  basic_questions_signature_flow
+  signature_date
+  interview_order_request_your_lease = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  request_your_lease_intro
+  interview_order_request_your_lease
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  request_your_lease_download
+---
+id: Request_your_lease
+continue button field: request_your_lease_intro
+question: |
+  Request your lease
+subquestion: |
+  This interview will help you request a copy of your lease.
+  
+  Before you get started, please gather:
+  
+  1. 
+  1. 
+  1. 
+  
+  When you are finished, you will need to:
+  
+  1. 
+  1.
+
+  If you are a _____________, you can use this interview to ____________.
+
+  Most people take about 10 minutes to complete this interview.
+---
+#id: Tell us about your landlord
+#question: |
+#  Tell us about your landlord
+#fields:
+#  - "What is the landlords address?": landlord[0].address.address
+#  - "What is the landlords full name?": landlord[0].name.first
+#---
+id: preview request_your_lease
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_recipient_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_request_your_lease'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: request_your_lease_preview_question    
+---
+code: |
+  signature_fields = ['users[0].signature']
+---
+id: request your lease review screen
+event: review_request_your_lease
+question: |
+  Review your answers
+review:
+  - Edit: users.revisit
+    button: |
+      **Users**
+
+      % for item in users:
+        * ${ item }
+      % endfor
+  - Edit: landlord[0].address.address
+    button: |
+      **What is the landlords address?**:
+      ${ landlord[0].address.address.block() }
+  - Edit: landlord[0].name.first
+    button: |
+      **What is the landlords full name?**:
+      ${ landlord[0].name.first }
+  - Edit: signature_date
+    button: |
+      **Date of Signature**:
+      ${ signature_date }
+---
+continue button field: users.revisit
+question: |
+  Edit users
+subquestion: |
+  ${ users.table }
+
+  ${ users.add_action() }
+---
+table: users.table
+rows: users
+columns:
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Signature: |
+      row_item.signature if defined("row_item.signature") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - address.address
+  - signature
+  - name.first
+confirm: True
+
+---
+id: download request_your_lease
+event: request_your_lease_download
+question: |
+  All done
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_request_your_lease'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - request_your_lease_Post_interview_instructions: ALDocument.using(title="Instructions", filename="request_your_lease_next_steps.docx", enabled=True, has_addendum=False)
+  - request_your_lease_attachment: ALDocument.using(title="Request your lease", filename="request_your_lease", enabled=True, has_addendum=False, )
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[request_your_lease_Post_interview_instructions, request_your_lease_attachment], filename="request_your_lease", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[request_your_lease_attachment],  filename="request_your_lease", title="All forms to file", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Post-interview-Instructions
+  filename: request_your_lease_next_steps
+  docx template file: request_your_lease_next_steps.docx
+  variable name: request_your_lease_Post_interview_instructions[i]
+  skip undefined: True
+  tagged pdf: True
+---
+attachment:
+  name: request your lease
+  filename: request_your_lease
+  variable name: request_your_lease_attachment[i]
+  skip undefined: True
+  docx template file: request_your_lease.docx
+  tagged pdf: True
+
+
+
