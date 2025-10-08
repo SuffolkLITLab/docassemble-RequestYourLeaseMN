@@ -16,14 +16,14 @@ metadata:
     
     Before you get started, please gather:
     
-    1. 
-    1. 
-    1. 
+    1. Your landlords full legal name
+    2. Your landlords mailing address
+
     
     When you are finished, you will need to:
     
-    1. 
-    1.
+    Deliver this form to your landlord, either by mail, by email, or by printing it out and providing it in person
+    
   maturity: production
   estimated_completion_minutes: 10
   estimated_completion_delta: 5
@@ -122,22 +122,21 @@ continue button field: request_your_lease_intro
 question: |
   Request your lease
 subquestion: |
-  This interview will help you request a copy of your lease.
+  This form will help you request a copy of your lease from your landlord.
   
   Before you get started, please gather:
   
-  1. 
-  1. 
-  1. 
+  1. Your landlords first and last name
+  2. Your landlords address
+
   
   When you are finished, you will need to:
-  
-  1. 
-  1.
+  deliver this form to your landlord, either by mail, by email, or by printing it out and providing it in person
 
-  If you are a _____________, you can use this interview to ____________.
 
-  Most people take about 10 minutes to complete this interview.
+  If you are a tenant, you can use this form to request a copy of your lease from your landlord.
+
+  Most people take about 5 minutes to complete this form.
 ---
 #id: Tell us about your landlord
 #question: |
