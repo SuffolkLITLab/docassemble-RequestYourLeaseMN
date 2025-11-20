@@ -22,7 +22,7 @@ metadata:
     
     When you are finished, you will need to:
     
-    Deliver this form to your landlord, either by mail, by email, or by printing it out and providing it in person
+    Deliver this form to your  , either by mail, by email, or by printing it out and providing it in person
     
   maturity: production
   estimated_completion_minutes: 10
@@ -76,26 +76,52 @@ objects:
   - users: ALPeopleList.using(there_are_any=True)
   - landlord: ALPeopleList.using(there_are_any=True)
 ---
+id: landlord_names
+question: |
+  Tell us about your landlord
+subquestion: |
+  Start with the first landlord on your lease. You can add more landlords if needed.
+fields:
+  - "Full name": landlord[i].name.first
+    datatype: text
+list collect: landlord
+there_is_another: |
+  Are there any other landlord names that need to be added
+add another label: "Add another landlord name"
+---
 sections:
   - review_request_your_lease: Review your answers
 ---
 #################### Interview order #####################
 comment: |
   Controls order and branching logic for questions specific to this form
+---
 id: interview_order_request_your_lease
 code: |
-  # Set the allowed courts for this interview
   nav.set_section("review_request_your_lease")
   user_role = "na"
   user_ask_role = "na"
+
   users.gather()
   set_parts(subtitle=str(users))
+
+  landlord.gather()
+
   landlord[0].address.address
   users[0].address.address
+
   set_progress(33)
   basic_questions_signature_flow
   signature_date
+
   interview_order_request_your_lease = True
+---
+code: |
+  landlord_name_for_letter = " and ".join([
+      person.name.first
+      for person in landlord
+      if person.name.first
+  ])
 ---
 ###################### Main order ######################
 comment: |
@@ -126,12 +152,12 @@ subquestion: |
   
   Before you get started, please gather:
   
-  1. Your landlords first and last name
-  2. Your landlords address
+  1. Your landlord's first and last name.
+  2. Your landlord's address.
 
   
   When you are finished, you will need to:
-  deliver this form to your landlord, either by mail, by email, or by printing it out and providing it in person
+  Deliver this form to your landlord, either by mail, email, or printing it out and providing it in person.
 
 
   If you are a tenant, you can use this form to request a copy of your lease from your landlord.
@@ -178,11 +204,11 @@ review:
       % endfor
   - Edit: landlord[0].address.address
     button: |
-      **What is the landlords address?**:
+      **What is your landlord's address?**:
       ${ landlord[0].address.address.block() }
   - Edit: landlord[0].name.first
     button: |
-      **What is the landlords full name?**:
+      **What is your landlord's full name?**:
       ${ landlord[0].name.first }
   - Edit: signature_date
     button: |
