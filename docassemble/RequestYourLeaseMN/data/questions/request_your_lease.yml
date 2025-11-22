@@ -78,9 +78,9 @@ objects:
 ---
 id: landlord_names
 question: |
-  Tell us about your landlord
+ Please provide the name(s) of your landlord(s)
 subquestion: |
-  Start with the first landlord on your lease. You can add more landlords if needed.
+  Start with the name of the first landlord on your lease and add more names if needed.
 fields:
   - "Full name": landlord[i].name.first
     datatype: text
@@ -91,6 +91,15 @@ add another label: "Add another landlord name"
 ---
 sections:
   - review_request_your_lease: Review your answers
+---
+id: landlord_address
+question: |
+  Please provide the address of the landlord
+subquestion: |
+  This is the mailing address where you would send this letter.
+fields:
+  - "Landlord address": landlord[0].address
+    datatype: address
 ---
 #################### Interview order #####################
 comment: |
@@ -204,11 +213,11 @@ review:
       % endfor
   - Edit: landlord[0].address.address
     button: |
-      **What is your landlord's address?**:
+      **Please provide the address of the landlord**:
       ${ landlord[0].address.address.block() }
   - Edit: landlord[0].name.first
     button: |
-      **What is your landlord's full name?**:
+      **Please provide the landlord's full name?**:
       ${ landlord[0].name.first }
   - Edit: signature_date
     button: |
