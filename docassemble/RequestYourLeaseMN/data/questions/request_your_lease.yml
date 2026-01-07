@@ -1,6 +1,7 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.HOMELineTheme:main.yml
 ---
 metadata:
   title: >-
@@ -8,18 +9,15 @@ metadata:
   short title: >-
     Request your lease
   description: |-
-    This interview helps someone in Minnesota request a copy of your lease.
+    This interview helps someone in Minnesota request a copy of their lease. You may need a copy of your lease to prove where you live, before you go to court, or for a number of other reasons. You have a right to request a copy of your lease from your landlord. 
   can_I_use_this_form: |
-    If you are a tenant living in Minnesota, you can use this interview to request a copy of your lease from your landlord.
-  before_you_start: |
-    This interview will help you request a copy of your lease.
-    
+    If you are a tenant living in Minnesota who does not already have a copy of your lease, you can use this tool.
+  before_you_start: |    
     Before you get started, please gather:
     
-    1. Your landlords full legal name
-    2. Your landlords mailing address
+    1. Your landlord's full legal name
+    2. Your landlord's mailing address
 
-    
     When you are finished, you will need to:
     
     Deliver this form to your landlord, either by mail, by email, or by printing it out and providing it in person
